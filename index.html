@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NFG MOVIES FLAX</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,28 +10,132 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     
     <style>
-        :root{--primary-color:#6d28d9;--secondary-color:#db2777;--dark-color:#0f172a;--light-dark-color:#1e293b;--text-color:#e2e8f0;--text-muted:#94a3b8}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Poppins',sans-serif;background-color:var(--dark-color);color:var(--text-color);overflow-x:hidden}header{position:fixed;top:0;left:0;width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 5%;z-index:100;background:transparent}.header-left{display:flex;align-items:center;gap:16px}#menu-btn{font-size:1.8rem;cursor:pointer;color:var(--text-color)}.logo{font-size:1.5rem;font-weight:800;color:#fff;text-shadow:0 0 10px var(--primary-color);line-height:1.1}.search-container{border:1px solid rgba(255,255,255,0.2);padding:8px 16px;border-radius:50px;display:flex;align-items:center;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px)}#search-input{background:transparent;border:none;color:var(--text-color);outline:none;width:150px;font-size:1rem}#search-input::placeholder{color:var(--text-muted)}.search-container i{color:var(--text-muted)}
+        :root{--primary-color:#6d28d9;--secondary-color:#db2777;--dark-color:#0f172a;--light-dark-color:#1e293b;--text-color:#e2e8f0;--text-muted:#94a3b8}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Poppins',sans-serif;background-color:var(--dark-color);color:var(--text-color);overflow-x:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+        
+        /* Disable zoom on double tap */
+        * { touch-action: manipulation; }
+        
+        header{position:fixed;top:0;left:0;width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 5%;z-index:100;background:transparent}
+        .header-left{display:flex;align-items:center;gap:16px}
+        #menu-btn{font-size:1.8rem;cursor:pointer;color:var(--text-color)}
+        .logo{font-size:1.5rem;font-weight:800;color:#fff;text-shadow:0 0 10px var(--primary-color);line-height:1.1}
+        .search-container{border:1px solid rgba(255,255,255,0.2);padding:8px 16px;border-radius:50px;display:flex;align-items:center;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px)}
+        #search-input{background:transparent;border:none;color:var(--text-color);outline:none;width:150px;font-size:1rem}
+        #search-input::placeholder{color:var(--text-muted)}
+        .search-container i{color:var(--text-muted)}
         
         /* === UPDATED HERO SECTION STYLES === */
         #hero-section{height:90vh;display:flex;align-items:flex-end;padding:5%;position:relative;background-size:cover;background-position:center top;transition:background-image .5s ease-in-out}
         #hero-section::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg, rgba(15,23,42,0) 0%, rgba(15,23,42,0.6) 50%, var(--dark-color) 95%)}
         .hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:20px;animation:fadeIn 1s ease-out}
         
-        /* === YAHAN SIZE CHANGE KIYA GAYA HAI === */
-        #hero-title{font-size:3.5rem;font-weight:800;line-height:1.2;margin:0;text-shadow:0 4px 20px rgba(0,0,0,0.5)}
+        /* === HERO TITLE SIZE NORMAL KAR DIYA GAYA HAI === */
+        #hero-title{font-size:2.5rem;font-weight:800;line-height:1.2;margin:0;text-shadow:0 4px 20px rgba(0,0,0,0.5)}
         
         .hero-content .category{background-color:rgba(255,255,255,0.15);padding:8px 18px;border-radius:50px;font-size:1rem;font-weight:500;display:inline-block}
         .hero-btn{padding:14px 32px;border-radius:50px;font-size:1.1rem;font-weight:600;cursor:pointer;border:none;background-image:linear-gradient(to right,var(--primary-color),var(--secondary-color));color:#fff;transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:8px}
         .hero-btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,.2)}
         
-        #movie-grid{padding:0 5%;margin-top:24px;position:relative;z-index:5}.category-row{margin-bottom:48px}.movies-scroll{display:flex;overflow-x:auto;overflow-y:hidden;padding-bottom:20px;gap:16px}.movies-scroll::-webkit-scrollbar{height:8px}.movies-scroll::-webkit-scrollbar-track{background:var(--light-dark-color);border-radius:4px}.movies-scroll::-webkit-scrollbar-thumb{background:var(--primary-color);border-radius:4px}.movie-poster{flex:0 0 180px;height:270px;cursor:pointer;border-radius:12px;overflow:hidden;background-color:var(--light-dark-color);transition:transform .3s ease,box-shadow .3s ease}.movie-poster img{width:100%;height:100%;object-fit:cover}.movie-poster:hover{transform:scale(1.05) translateY(-5px);box-shadow:0 15px 30px rgba(0,0,0,.3),0 0 20px var(--primary-color)}.hidden{display:none!important}.loader{border:5px solid var(--light-dark-color);border-top:5px solid var(--primary-color);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin:100px auto}#movie-player-container{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;z-index:2000;display:flex;flex-direction:column}.player-header{padding:15px 20px;background-color:#111;display:flex;align-items:center}#player-close-btn{cursor:pointer;font-size:1.2em}#player-movie-title{margin-left:20px;font-size:1.2em}#player-content{flex-grow:1}#player-content iframe{width:100%;height:100%;border:none}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.category-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.category-title{font-size:1.5rem;font-weight:600}.view-all-btn{color:var(--text-muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s ease}.view-all-btn:hover{color:var(--primary-color)}.category-view-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;margin-top:80px}.back-btn{background:var(--light-dark-color);color:var(--text-color);padding:8px 16px;border-radius:50px;cursor:pointer;text-decoration:none;font-size:1rem;font-weight:500;transition:background-color .2s ease}.back-btn:hover{background-color:#334155}.category-list-view{display:flex;flex-direction:column;gap:12px}.movie-list-item{display:flex;align-items:center;background-color:var(--light-dark-color);border-radius:12px;padding:12px;cursor:pointer;transition:all .2s ease}.movie-list-item:hover{background-color:#334155;transform:translateY(-2px)}.movie-list-item img{width:80px;height:120px;object-fit:cover;border-radius:8px;margin-right:16px}.movie-list-item span{font-size:1.1rem;font-weight:500;color:var(--text-color);flex:1}#sidebar-menu{position:fixed;top:0;left:0;width:280px;height:100%;background-color:var(--dark-color);border-right:1px solid rgba(255,255,255,.1);z-index:1100;transform:translateX(-100%);transition:transform .3s ease-in-out;padding:20px;display:flex;flex-direction:column}#sidebar-menu.active{transform:translateX(0)}#sidebar-menu .sidebar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:15px;border-bottom:1px solid var(--light-dark-color)}#close-menu-btn{font-size:2.5rem;cursor:pointer;color:var(--text-muted);line-height:1}#close-menu-btn:hover{color:#fff}#category-list{display:flex;flex-direction:column;gap:5px;overflow-y:auto}#category-list a{color:var(--text-muted);text-decoration:none;padding:12px 15px;border-radius:8px;font-size:1.1rem;transition:background-color .2s,color .2s}#category-list a:hover{background-color:var(--light-dark-color);color:var(--text-color)}#menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:1099;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#menu-overlay.active{opacity:1;visibility:visible}#details-page{position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:var(--dark-color);z-index:1500;overflow-y:auto;transform:translateX(100%);transition:transform .5s cubic-bezier(0.4, 0, 0.2, 1)}#details-page.active{transform:translateX(0)}.details-bg-image{position:absolute;top:0;left:0;width:100%;height:60vh;background-size:cover;background-position:center top}.details-bg-image::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(to top,var(--dark-color) 15%,rgba(15,23,42,0.8) 60%,rgba(15,23,42,0.2) 100%)}.details-page-content{position:relative;z-index:1;padding:24px 5%;max-width:1100px;margin:auto}#details-back-btn{font-size:1.1rem;color:var(--text-color);background:rgba(0,0,0,.3);backdrop-filter:blur(5px);padding:10px 18px;border-radius:50px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-top:20px;border:1px solid rgba(255,255,255,0.1)}.details-main-content{margin-top:15vh;display:flex;gap:40px;align-items:flex-start}.details-poster-container{flex-basis:250px;flex-shrink:0}#details-main-poster{width:100%;height:auto;object-fit:cover;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.5)}.details-info-container{flex:1;padding-top:20px}#details-title{font-size:3rem;font-weight:700;margin-bottom:16px;line-height:1.2;text-shadow:0 2px 15px rgba(0,0,0,0.5)}#details-description{max-width:650px;color:var(--text-muted);margin-bottom:24px;font-size:1rem;line-height:1.8}.info-cards-container{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:24px}.info-card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);padding:12px 20px;border-radius:12px;display:flex;align-items:center;gap:10px}.info-card i{font-size:1.2rem;color:var(--primary-color)}.info-card div{display:flex;flex-direction:column}.info-card .label{font-size:.8rem;color:var(--text-muted);font-weight:500}.info-card .value{font-size:1.1rem;font-weight:600}.details-action-buttons{display:flex;gap:16px;margin-top:32px;flex-wrap:wrap}.details-action-buttons .btn{padding:14px 32px;border:none;border-radius:50px;cursor:pointer;font-size:1.1rem;font-weight:600;display:flex;align-items:center;gap:8px;transition:all .2s}.btn-watch{background-image:linear-gradient(to right,var(--primary-color),var(--secondary-color));color:#fff}.btn-download{background-color:var(--light-dark-color);color:var(--text-color)}.details-action-buttons .btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,.2)}
+        #movie-grid{padding:0 5%;margin-top:24px;position:relative;z-index:5}
+        .category-row{margin-bottom:48px}
+        .movies-scroll{display:flex;overflow-x:auto;overflow-y:hidden;padding-bottom:20px;gap:16px}
+        .movies-scroll::-webkit-scrollbar{height:8px}
+        .movies-scroll::-webkit-scrollbar-track{background:var(--light-dark-color);border-radius:4px}
+        .movies-scroll::-webkit-scrollbar-thumb{background:var(--primary-color);border-radius:4px}
+        .movie-poster{flex:0 0 180px;height:270px;cursor:pointer;border-radius:12px;overflow:hidden;background-color:var(--light-dark-color);transition:transform .3s ease,box-shadow .3s ease}
+        .movie-poster img{width:100%;height:100%;object-fit:cover}
+        .movie-poster:hover{transform:scale(1.05) translateY(-5px);box-shadow:0 15px 30px rgba(0,0,0,.3),0 0 20px var(--primary-color)}
+        .hidden{display:none!important}
+        .loader{border:5px solid var(--light-dark-color);border-top:5px solid var(--primary-color);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin:100px auto}
+        #movie-player-container{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;z-index:2000;display:flex;flex-direction:column}
+        .player-header{padding:15px 20px;background-color:#111;display:flex;align-items:center}
+        #player-close-btn{cursor:pointer;font-size:1.2em}
+        #player-movie-title{margin-left:20px;font-size:1.2em}
+        #player-content{flex-grow:1}
+        #player-content iframe{width:100%;height:100%;border:none}
+        @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .category-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+        .category-title{font-size:1.5rem;font-weight:600}
+        .view-all-btn{color:var(--text-muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s ease}
+        .view-all-btn:hover{color:var(--primary-color)}
+        .category-view-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;margin-top:80px}
+        .back-btn{background:var(--light-dark-color);color:var(--text-color);padding:8px 16px;border-radius:50px;cursor:pointer;text-decoration:none;font-size:1rem;font-weight:500;transition:background-color .2s ease}
+        .back-btn:hover{background-color:#334155}
+        .category-list-view{display:flex;flex-direction:column;gap:12px}
+        .movie-list-item{display:flex;align-items:center;background-color:var(--light-dark-color);border-radius:12px;padding:12px;cursor:pointer;transition:all .2s ease}
+        .movie-list-item:hover{background-color:#334155;transform:translateY(-2px)}
+        .movie-list-item img{width:80px;height:120px;object-fit:cover;border-radius:8px;margin-right:16px}
+        .movie-list-item span{font-size:1.1rem;font-weight:500;color:var(--text-color);flex:1}
+        #sidebar-menu{position:fixed;top:0;left:0;width:280px;height:100%;background-color:var(--dark-color);border-right:1px solid rgba(255,255,255,.1);z-index:1100;transform:translateX(-100%);transition:transform .3s ease-in-out;padding:20px;display:flex;flex-direction:column}
+        #sidebar-menu.active{transform:translateX(0)}
+        #sidebar-menu .sidebar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:15px;border-bottom:1px solid var(--light-dark-color)}
+        #close-menu-btn{font-size:2.5rem;cursor:pointer;color:var(--text-muted);line-height:1}
+        #close-menu-btn:hover{color:#fff}
+        #category-list{display:flex;flex-direction:column;gap:5px;overflow-y:auto;margin-bottom:20px}
+        #category-list a{color:var(--text-muted);text-decoration:none;padding:12px 15px;border-radius:8px;font-size:1.1rem;transition:background-color .2s,color .2s}
+        #category-list a:hover{background-color:var(--light-dark-color);color:var(--text-color)}
+        #menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:1099;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+        #menu-overlay.active{opacity:1;visibility:visible}
+        #details-page{position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:var(--dark-color);z-index:1500;overflow-y:auto;transform:translateX(100%);transition:transform .5s cubic-bezier(0.4, 0, 0.2, 1)}
+        #details-page.active{transform:translateX(0)}
+        .details-bg-image{position:absolute;top:0;left:0;width:100%;height:60vh;background-size:cover;background-position:center top}
+        .details-bg-image::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(to top,var(--dark-color) 15%,rgba(15,23,42,0.8) 60%,rgba(15,23,42,0.2) 100%)}
+        .details-page-content{position:relative;z-index:1;padding:24px 5%;max-width:1100px;margin:auto}
+        #details-back-btn{font-size:1.1rem;color:var(--text-color);background:rgba(0,0,0,.3);backdrop-filter:blur(5px);padding:10px 18px;border-radius:50px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-top:20px;border:1px solid rgba(255,255,255,0.1)}
+        .details-main-content{margin-top:15vh;display:flex;gap:40px;align-items:flex-start}
+        .details-poster-container{flex-basis:250px;flex-shrink:0}
+        #details-main-poster{width:100%;height:auto;object-fit:cover;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+        .details-info-container{flex:1;padding-top:20px}
+        #details-title{font-size:2.2rem;font-weight:700;margin-bottom:16px;line-height:1.2;text-shadow:0 2px 15px rgba(0,0,0,0.5)}
+        #details-description{max-width:650px;color:var(--text-muted);margin-bottom:24px;font-size:1rem;line-height:1.8}
+        .info-cards-container{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+        .info-card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);padding:12px 20px;border-radius:12px;display:flex;align-items:center;gap:10px}
+        .info-card i{font-size:1.2rem;color:var(--primary-color)}
+        .info-card div{display:flex;flex-direction:column}
+        .info-card .label{font-size:.8rem;color:var(--text-muted);font-weight:500}
+        .info-card .value{font-size:1.1rem;font-weight:600}
+        
+        /* Owner Card Styles */
+        .owner-card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);padding:12px 20px;border-radius:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .2s ease;margin-bottom:16px}
+        .owner-card:hover{background:rgba(255,255,255,0.15);transform:translateY(-2px)}
+        .owner-card i{font-size:1.2rem;color:var(--secondary-color)}
+        .owner-card div{display:flex;flex-direction:column}
+        .owner-card .label{font-size:.8rem;color:var(--text-muted);font-weight:500}
+        .owner-card .value{font-size:1.1rem;font-weight:600;color:var(--text-color)}
+        
+        .details-action-buttons{display:flex;gap:16px;margin-top:32px;flex-wrap:wrap}
+        .details-action-buttons .btn{padding:14px 32px;border:none;border-radius:50px;cursor:pointer;font-size:1.1rem;font-weight:600;display:flex;align-items:center;gap:8px;transition:all .2s}
+        .btn-watch{background-image:linear-gradient(to right,var(--primary-color),var(--secondary-color));color:#fff}
+        .btn-download{background-color:var(--light-dark-color);color:var(--text-color)}
+        .details-action-buttons .btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,.2)}
+        
+        /* APK Download Button in Sidebar */
+        .apk-download-btn{background:linear-gradient(to right,var(--primary-color),var(--secondary-color));color:white;border:none;padding:14px 16px;border-radius:8px;cursor:pointer;font-size:1rem;font-weight:600;display:flex;align-items:center;gap:10px;margin-top:auto;transition:all .2s;text-decoration:none;justify-content:center;width:100%}
+        .apk-download-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,.2)}
         
         @media (max-width:768px){
             #search-input{width:100px}
             #hero-section{height:85vh}
-            #hero-title{font-size:3.2rem}
+            /* Mobile me hero title aur chota */
+            #hero-title{font-size:2rem}
             .movie-poster{flex:0 0 150px; height:225px}
-            .details-main-content{flex-direction:column;align-items:center;text-align:center;margin-top:10vh;gap:24px}.details-poster-container{flex-basis:auto;width:60%;max-width:200px}.details-info-container{padding-top:0;display:flex;flex-direction:column;align-items:center}#details-title{font-size:2.2rem}#details-description{font-size:0.95rem}.info-cards-container{justify-content:center}.details-action-buttons{justify-content:center}}
+            .details-main-content{flex-direction:column;align-items:center;text-align:center;margin-top:10vh;gap:24px}
+            .details-poster-container{flex-basis:auto;width:60%;max-width:200px}
+            .details-info-container{padding-top:0;display:flex;flex-direction:column;align-items:center}
+            #details-title{font-size:1.8rem}
+            #details-description{font-size:0.95rem}
+            .info-cards-container{justify-content:center}
+            .details-action-buttons{justify-content:center}
+        }
+        
+        /* Prevent zoom on double tap for iOS */
+        @media (max-width: 768px) {
+            body { -webkit-text-size-adjust: none; }
+            input, textarea, select { font-size: 16px; } /* Prevents zoom on focus in iOS */
+        }
     </style>
 </head>
 <body>
@@ -40,7 +144,18 @@
             <div class="header-left"><i class="fas fa-bars" id="menu-btn"></i><div class="logo">NFG FLIX</div></div>
             <div class="search-container"><i class="fas fa-search"></i><input type="text" id="search-input" placeholder="Search..."></div>
         </header>
-        <div id="sidebar-menu"><div class="sidebar-header"><h3>Categories</h3><span id="close-menu-btn">×</span></div><div id="category-list"></div></div>
+        <div id="sidebar-menu">
+            <div class="sidebar-header">
+                <h3>Categories</h3>
+                <span id="close-menu-btn">×</span>
+            </div>
+            <div id="category-list"></div>
+            <!-- APK Download Button -->
+            <a href="#" id="apk-download-btn" class="apk-download-btn">
+                <i class="fas fa-download"></i>
+                Download APK
+            </a>
+        </div>
         <div id="menu-overlay"></div>
         
         <section id="hero-section">
@@ -66,6 +181,14 @@
                         <div class="info-card"><i class="fas fa-calendar-alt"></i><div><span class="label">Year</span><span id="details-year" class="value">...</span></div></div>
                         <div class="info-card"><i class="fas fa-film"></i><div><span class="label">Genre</span><span id="details-genre" class="value">...</span></div></div>
                     </div>
+                    <!-- Owner Card -->
+                    <div class="owner-card" id="owner-card" style="display: none;">
+                        <i class="fab fa-instagram"></i>
+                        <div>
+                            <span class="label">Owner</span>
+                            <span class="value">Follow on Instagram</span>
+                        </div>
+                    </div>
                     <p id="details-description">Description loading...</p>
                     <div class="details-action-buttons">
                         <button id="details-watch-btn" class="btn btn-watch"><i class="fas fa-play"></i> Watch Now</button>
@@ -80,18 +203,18 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, increment, query, orderBy } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, increment, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
         
         const firebaseConfig = {
-  apiKey: "AIzaSyDuj2qSg1bp0xD9DRycwN-ilm7G8Ta1wac",
-  authDomain: "nfgmovie.firebaseapp.com",
-  databaseURL: "https://nfgmovie-default-rtdb.firebaseio.com",
-  projectId: "nfgmovie",
-  storageBucket: "nfgmovie.firebasestorage.app",
-  messagingSenderId: "817690106012",
-  appId: "1:817690106012:web:70ba4634d03603f677f559",
-  measurementId: "G-L6KK21QM98"
-};
+            apiKey: "AIzaSyDuj2qSg1bp0xD9DRycwN-ilm7G8Ta1wac",
+            authDomain: "nfgmovie.firebaseapp.com",
+            databaseURL: "https://nfgmovie-default-rtdb.firebaseio.com",
+            projectId: "nfgmovie",
+            storageBucket: "nfgmovie.firebasestorage.app",
+            messagingSenderId: "817690106012",
+            appId: "1:817690106012:web:70ba4634d03603f677f559",
+            measurementId: "G-L6KK21QM98"
+        };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -107,15 +230,22 @@
         const menuOverlay = document.getElementById("menu-overlay");
         const categoryList = document.getElementById("category-list");
         const detailsPage = document.getElementById("details-page");
+        const apkDownloadBtn = document.getElementById("apk-download-btn");
+        const ownerCard = document.getElementById("owner-card");
         
         let allMovies = [];
         let categories = [];
+        let appSettings = {};
 
         async function fetchAndDisplayContent() {
             const q = query(collection(db, "movies"), orderBy("createdAt", "desc"));
             const querySnapshot = await getDocs(q);
             allMovies = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             loader.classList.add("hidden");
+            
+            // Load app settings
+            await loadAppSettings();
+            
             if (allMovies.length === 0) {
                 mainContent.innerHTML = '<p style="text-align:center;">Koi movie available nahi hai.</p>';
                 heroSection.style.display = "none"; return;
@@ -123,6 +253,31 @@
             categories = [...new Set(allMovies.map(movie => movie.category))];
             populateCategoryMenu();
             restoreMainView();
+        }
+
+        // Load app settings
+        async function loadAppSettings() {
+            try {
+                const settingsDoc = await getDoc(doc(db, "settings", "app"));
+                if (settingsDoc.exists()) {
+                    appSettings = settingsDoc.data();
+                    // Set APK download button link
+                    if (appSettings.apkDownloadLink) {
+                        apkDownloadBtn.href = appSettings.apkDownloadLink;
+                        apkDownloadBtn.target = '_blank';
+                    } else {
+                        // If no link, hide the button
+                        apkDownloadBtn.style.display = 'none';
+                    }
+                } else {
+                    // If no settings document, hide the button
+                    apkDownloadBtn.style.display = 'none';
+                }
+            } catch (e) { 
+                console.error("Error loading settings: ", e); 
+                // Hide button if error
+                apkDownloadBtn.style.display = 'none';
+            }
         }
 
         function restoreMainView() {
@@ -139,7 +294,6 @@
             if (!movie) return;
             heroSection.style.backgroundImage = `url(${movie.backgroundPosterUrl || movie.posterUrl})`;
             
-            // === IMPORTANT CHANGE HERE: Using innerHTML for multi-line titles ===
             document.getElementById("hero-title").innerHTML = movie.title;
             
             document.getElementById("hero-category-tag").textContent = movie.category;
@@ -189,8 +343,24 @@
             document.getElementById('details-description').textContent = movie.description || 'No description available.';
             document.getElementById('details-year').textContent = movie.year || 'N/A';
             document.getElementById('details-genre').textContent = movie.category;
+            
+            // Show owner card if owner link exists
+            if (movie.owner) {
+                ownerCard.style.display = 'flex';
+                ownerCard.onclick = () => { window.open(movie.owner, '_blank'); };
+            } else {
+                ownerCard.style.display = 'none';
+            }
+            
             document.getElementById('details-watch-btn').onclick = () => { openPlayer(movie.watchLink, movie.title); incrementStat("views"); };
-            document.getElementById('details-download-btn').onclick = () => { window.open(movie.downloadLink, "_blank"); incrementStat("downloads"); };
+            document.getElementById('details-download-btn').onclick = () => { 
+                if (movie.downloadLink) {
+                    window.open(movie.downloadLink, "_blank"); 
+                    incrementStat("downloads");
+                } else {
+                    alert('Download link not available for this movie.');
+                }
+            };
         }
         document.getElementById("details-back-btn").addEventListener("click", (e) => { e.preventDefault(); restoreMainView(); });
 
@@ -229,6 +399,21 @@
         menuOverlay.addEventListener("click", closeMenu);
 
         document.addEventListener("DOMContentLoaded", fetchAndDisplayContent);
+        
+        // Additional zoom prevention
+        document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+        document.addEventListener('gesturechange', function (e) { e.preventDefault(); });
+        document.addEventListener('gestureend', function (e) { e.preventDefault(); });
+        
+        // Prevent double tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>
