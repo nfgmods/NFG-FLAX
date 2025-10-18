@@ -49,12 +49,21 @@
         .movie-poster:hover{transform:scale(1.05) translateY(-5px);box-shadow:0 15px 30px rgba(0,0,0,.3),0 0 20px var(--primary-color)}
         .hidden{display:none!important}
         .loader{border:5px solid var(--light-dark-color);border-top:5px solid var(--primary-color);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin:100px auto}
+        
+        /* === SIMPLE VIDEO PLAYER === */
         #movie-player-container{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;z-index:2000;display:flex;flex-direction:column}
-        .player-header{padding:15px 20px;background-color:#111;display:flex;align-items:center}
-        #player-close-btn{cursor:pointer;font-size:1.2em}
-        #player-movie-title{margin-left:20px;font-size:1.2em}
-        #player-content{flex-grow:1}
-        #player-content iframe{width:100%;height:100%;border:none}
+        
+        .player-header{background:rgba(0,0,0,0.8);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:absolute;top:0;left:0;width:100%;z-index:10}
+        #player-close-btn{color:#fff;font-size:1.5rem;cursor:pointer;background:none;border:none}
+        .player-title{color:#fff;font-size:1rem;font-weight:600;margin-left:16px}
+        
+        #player-content{flex-grow:1;position:relative;background:#000}
+        #player-iframe{width:100%;height:100%;border:none}
+        
+        /* Loading Spinner */
+        .video-loading{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);color:#fff;font-size:3rem;display:none}
+        .video-loading .fas{animation:spin 1s linear infinite}
+        
         @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
         @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
         .category-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
@@ -199,7 +208,20 @@
         </div>
     </div>
     
-    <div id="movie-player-container" class="hidden"><div class="player-header"><span id="player-close-btn">← Back</span><h3 id="player-movie-title">Movie Title</h3></div><div id="player-content"></div></div>
+    <!-- Simple Video Player -->
+    <div id="movie-player-container" class="hidden">
+        <div class="player-header">
+            <button id="player-close-btn"><i class="fas fa-arrow-left"></i></button>
+            <div class="player-title" id="player-video-title">Movie Title</div>
+        </div>
+        
+        <div id="player-content">
+            <iframe id="player-iframe" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            <div class="video-loading" id="video-loading">
+                <i class="fas fa-spinner"></i>
+            </div>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
@@ -233,9 +255,52 @@
         const apkDownloadBtn = document.getElementById("apk-download-btn");
         const ownerCard = document.getElementById("owner-card");
         
+        // Video player elements
+        const playerIframe = document.getElementById("player-iframe");
+        const videoLoading = document.getElementById("video-loading");
+        const playerCloseBtn = document.getElementById("player-close-btn");
+        const playerVideoTitle = document.getElementById("player-video-title");
+        
         let allMovies = [];
         let categories = [];
         let appSettings = {};
+
+        // Function to convert Google Drive link to embed URL
+        function getEmbedUrl(watchLink) {
+            // If it's already an embed URL, return as is
+            if (watchLink.includes('/embed/') || watchLink.includes('/preview')) {
+                return watchLink;
+            }
+            
+            // Convert Google Drive file link to embed URL
+            if (watchLink.includes('drive.google.com/file/d/')) {
+                const match = watchLink.match(/\/d\/([^\/]+)/);
+                if (match && match[1]) {
+                    return `https://drive.google.com/file/d/${match[1]}/preview`;
+                }
+            }
+            
+            // Convert Google Drive open link to embed URL
+            if (watchLink.includes('drive.google.com/open?id=')) {
+                const match = watchLink.match(/id=([^&]+)/);
+                if (match && match[1]) {
+                    return `https://drive.google.com/file/d/${match[1]}/preview`;
+                }
+            }
+            
+            // For other video URLs, try to use as direct source
+            // If it ends with common video extensions, it might work directly
+            const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.m3u8'];
+            const isDirectVideo = videoExtensions.some(ext => watchLink.toLowerCase().includes(ext));
+            
+            if (isDirectVideo) {
+                // For direct video files, we need to use video element instead of iframe
+                return watchLink;
+            }
+            
+            // If none of the above, return original link
+            return watchLink;
+        }
 
         async function fetchAndDisplayContent() {
             const q = query(collection(db, "movies"), orderBy("createdAt", "desc"));
@@ -292,7 +357,9 @@
 
         function displayFeaturedMovie(movie) {
             if (!movie) return;
-            heroSection.style.backgroundImage = `url(${movie.backgroundPosterUrl || movie.posterUrl})`;
+            
+            // YAHAN CHANGE KIYA HAI - backgroundPosterUrl ki jagah posterUrl use karo
+            heroSection.style.backgroundImage = `url(${movie.posterUrl})`;
             
             document.getElementById("hero-title").innerHTML = movie.title;
             
@@ -337,7 +404,9 @@
             detailsPage.scrollTop = 0;
             mainView.classList.add("hidden");
             detailsPage.classList.add("active");
-            document.getElementById('details-bg-image').style.backgroundImage = `url(${movie.backgroundPosterUrl || movie.posterUrl})`;
+            
+            // YAHAN BHI CHANGE KIYA HAI - details page mein bhi posterUrl use karo
+            document.getElementById('details-bg-image').style.backgroundImage = `url(${movie.posterUrl})`;
             document.getElementById('details-main-poster').src = movie.posterUrl;
             document.getElementById('details-title').innerHTML = movie.title;
             document.getElementById('details-description').textContent = movie.description || 'No description available.';
@@ -365,16 +434,42 @@
         document.getElementById("details-back-btn").addEventListener("click", (e) => { e.preventDefault(); restoreMainView(); });
 
         function openPlayer(watchLink, title) {
-            let embedUrl = watchLink;
-            if (watchLink && watchLink.includes("drive.google.com/file")) {
-                const idPart = watchLink.split('/d/')[1].split('/')[0];
-                embedUrl = `https://drive.google.com/file/d/${idPart}/preview`;
-            }
             playerContainer.classList.remove("hidden");
-            document.getElementById("player-movie-title").textContent = title.replace(/<br>/g, ' ');
-            document.getElementById("player-content").innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+            playerVideoTitle.textContent = title.replace(/<br>/g, ' ');
+            videoLoading.style.display = 'block';
+            
+            // Get proper embed URL
+            const embedUrl = getEmbedUrl(watchLink);
+            console.log('Original URL:', watchLink);
+            console.log('Embed URL:', embedUrl);
+            
+            // Set iframe source
+            playerIframe.src = embedUrl;
+            
+            // Hide loading after some time
+            setTimeout(() => {
+                videoLoading.style.display = 'none';
+            }, 3000);
+            
+            incrementStat("views");
         }
-        document.getElementById("player-close-btn").onclick = () => { playerContainer.classList.add("hidden"); document.getElementById("player-content").innerHTML = ""; };
+        
+        playerCloseBtn.addEventListener("click", () => { 
+            playerContainer.classList.add("hidden"); 
+            playerIframe.src = "";
+            videoLoading.style.display = 'none';
+        });
+
+        // Handle iframe load event
+        playerIframe.addEventListener('load', () => {
+            videoLoading.style.display = 'none';
+        });
+
+        // Handle iframe error event
+        playerIframe.addEventListener('error', () => {
+            videoLoading.style.display = 'none';
+            alert('Video load nahi ho paya. Kripya koshish karein ya koi aur video select karein.');
+        });
 
         async function incrementStat(statType) {
             const today = new Date().toISOString().split("T")[0];
